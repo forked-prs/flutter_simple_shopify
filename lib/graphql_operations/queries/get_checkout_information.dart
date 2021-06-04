@@ -40,7 +40,7 @@ query(\$id: ID!) {
                     altText
                     id
                     originalSrc
-                    transformedSrc(maxWidth: 200, crop: CENTER)
+                    transformedSrc(maxWidth: 400, crop: CENTER)
                   }
                 }
               }
@@ -129,7 +129,7 @@ query(\$id: ID!) {
               image {
                 altText
                 originalSrc
-                transformedSrc(maxWidth: 200, crop: CENTER)
+                transformedSrc(maxWidth: 400, crop: CENTER)
                 id
               }
               compareAtPriceV2 {
