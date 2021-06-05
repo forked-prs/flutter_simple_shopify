@@ -1,11 +1,13 @@
 import 'package:flutter_simple_shopify/enums/enums.dart';
 import 'package:flutter_simple_shopify/enums/src/sort_key_collection.dart';
+import 'package:flutter_simple_shopify/flutter_simple_shopify.dart';
 import 'package:flutter_simple_shopify/graphql_operations/queries/get_all_collections_optimized.dart';
 import 'package:flutter_simple_shopify/graphql_operations/queries/get_all_products_from_collection_by_id.dart';
 import 'package:flutter_simple_shopify/graphql_operations/queries/get_all_products_on_query.dart';
 import 'package:flutter_simple_shopify/graphql_operations/queries/get_collection_by_handle.dart';
 import 'package:flutter_simple_shopify/graphql_operations/queries/get_collection_by_handle_with_products.dart';
 import 'package:flutter_simple_shopify/graphql_operations/queries/get_collections_by_ids.dart';
+import 'package:flutter_simple_shopify/graphql_operations/queries/get_page_by_handle.dart';
 import 'package:flutter_simple_shopify/graphql_operations/queries/get_product_by_handle.dart';
 import 'package:flutter_simple_shopify/graphql_operations/queries/get_product_by_handle_minimum_data.dart';
 import 'package:flutter_simple_shopify/graphql_operations/queries/get_product_recommendations.dart';
@@ -501,4 +503,24 @@ class ShopifyStore with ShopifyError {
         .map((e) => Metafield.fromJson(e))
         .toList();
   }
+
+  /// Returns a [ShopifyPage].
+  ///
+  /// Returns the [ShopifyPage] that is associated to the [handle].
+  Future<ShopifyPage> getPageByHandle(String handle,{bool deleteThisPartOfCache = false}) async {
+    final QueryOptions _options =
+        WatchQueryOptions(documentNode: gql(getPageByHandleQuery), 
+        variables: {
+          'handle': handle,
+      });
+    final QueryResult result = await _graphQLClient.query(_options);
+    checkForError(result);
+    var response = (result?.data['pageByHandle'] as LazyCacheMap)?.data;
+    // var newResponse = {'node': response};
+    if (deleteThisPartOfCache) {
+      _graphQLClient.cache.write(_options.toKey(), null);
+    }
+    return ShopifyPage.fromJson(response);
+  }
+
 }

@@ -14,13 +14,13 @@ query($handle : String!, $sortKey: ArticleSortKeys, $reverseArticles: Boolean){
           comments(first: 250) {
             edges {
               node {
-                content
-                contentHtml
-                id
                 author {
                   email
                   name
                 }
+                content
+                contentHtml
+                id
               }
             }
           }
@@ -28,8 +28,8 @@ query($handle : String!, $sortKey: ArticleSortKeys, $reverseArticles: Boolean){
           contentHtml
           excerpt
           excerptHtml
-          id
           handle
+          id
           image {
             altText
             id
